@@ -28,5 +28,10 @@ def state():
 def home():
     return "Travel RL Environment Running"
 
-if __name__ == "__main__":
+# ✅ REQUIRED main function
+def main():
     app.run(host="0.0.0.0", port=7860)
+
+# ✅ REQUIRED entry point
+if __name__ == "__main__":
+    main()
