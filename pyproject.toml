@@ -6,8 +6,12 @@ authors = [
     {name = "Vyshnavi"}
 ]
 dependencies = [
-    "flask"
+    "flask",
+    "openenv-core>=0.2.0"
 ]
+
+[project.scripts]
+server = "server.app:app"
 
 [build-system]
 requires = ["setuptools"]
