@@ -1,1 +1,0 @@
-print("Travel RL Environment is running successfully!")
