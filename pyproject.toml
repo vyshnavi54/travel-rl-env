@@ -1,0 +1,14 @@
+[project]
+name = "travel-rl-env"
+version = "0.1.0"
+description = "Adaptive Travel Planner RL Environment"
+authors = [
+    {name = "Vyshnavi"}
+]
+dependencies = [
+    "flask"
+]
+
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
