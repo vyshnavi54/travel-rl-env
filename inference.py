@@ -2,7 +2,7 @@ import os
 from openai import OpenAI
 from env import TravelEnv
 
-# ✅ MUST use these EXACT env variables
+
 client = OpenAI(
     api_key=os.environ.get("API_KEY"),
     base_url=os.environ.get("API_BASE_URL")
@@ -19,7 +19,7 @@ total_reward = 0
 
 for step in range(3):
 
-    # ✅ SIMPLE prompt (important)
+   
     prompt = f"State: {state}. Choose action (0,1,2). Return only one number."
 
     try:
