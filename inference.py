@@ -2,9 +2,10 @@ import os
 from openai import OpenAI
 from env import TravelEnv
 
+# ✅ MUST use these EXACT env variables
 client = OpenAI(
-    base_url=os.environ["API_BASE_URL"],
-    api_key=os.environ["API_KEY"]
+    api_key=os.environ.get("API_KEY"),
+    base_url=os.environ.get("API_BASE_URL")
 )
 
 env = TravelEnv()
@@ -18,14 +19,23 @@ total_reward = 0
 
 for step in range(3):
 
-    prompt = f"State: {state}. Choose best action: 0 Beach, 1 Temple, 2 Park. Return only number."
+    # ✅ SIMPLE prompt (important)
+    prompt = f"State: {state}. Choose action (0,1,2). Return only one number."
 
-    response = client.chat.completions.create(
-        model=os.environ.get("MODEL_NAME", "gpt-3.5-turbo"),
-        messages=[{"role": "user", "content": prompt}]
-    )
+    try:
+        response = client.chat.completions.create(
+            model=os.environ.get("MODEL_NAME"),
+            messages=[
+                {"role": "user", "content": prompt}
+            ]
+        )
 
-    action_text = response.choices[0].message.content.strip()
+        action_text = response.choices[0].message.content.strip()
+
+    except Exception as e:
+        # fallback if API fails
+        print("[STEP] API error, using fallback")
+        action_text = "0"
 
     if action_text not in ["0", "1", "2"]:
         action = 0
