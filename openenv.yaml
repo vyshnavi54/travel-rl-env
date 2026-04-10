@@ -1,5 +1,4 @@
 name: travel_planner_env
-
 description: >
   A reinforcement learning environment for smart travel planning.
   The agent recommends places based on budget and user preferences.
@@ -18,20 +17,18 @@ action_space:
     1: Temple
     2: Park
 
-reward:
-  description: >
-    Reward is based on:
-    - Matching user preferences (+5)
-    - Staying within budget (+3)
-    - Over budget penalty (-5)
-    - Preference mismatch penalty (-2)
-
 tasks:
-  - name: easy
-    description: Recommend a simple place within budget
+  - id: preference_match
+    name: easy
+    description: Recommend a place matching user preferences
+    grader: reward
 
-  - name: medium
-    description: Plan a 1-day trip considering budget
+  - id: budget_efficiency
+    name: medium
+    description: Plan a 1-day trip staying within budget
+    grader: reward
 
-  - name: hard
-    description: Plan multi-day trip optimizing preferences and budget
+  - id: itinerary_diversity
+    name: hard
+    description: Plan multi-day trip with diverse destinations
+    grader: reward
