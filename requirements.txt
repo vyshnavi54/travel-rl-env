@@ -1,3 +1,5 @@
-flask
+openenv-core>=0.2.0
+fastapi
+uvicorn
+pydantic
 openai
-openenv-core>=0.1.0
