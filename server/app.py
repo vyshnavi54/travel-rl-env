@@ -7,6 +7,9 @@ from server.travel_environment import TravelEnvironment
 
 app = create_app(TravelEnvironment, TravelAction, TravelObservation, env_name="travel_planner_env")
 
-if __name__ == "__main__":
+def main():
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=7860)
+
+if __name__ == "__main__":
+    main()
