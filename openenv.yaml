@@ -1,34 +1,10 @@
+spec_version: 1
 name: travel_planner_env
+type: environment
+runtime: docker
+app: server.app:app
+port: 7860
+
 description: >
   A reinforcement learning environment for smart travel planning.
   The agent recommends places based on budget and user preferences.
-
-state_space:
-  type: dict
-  features:
-    budget: integer
-    preferences: list
-    day: integer
-
-action_space:
-  type: discrete
-  actions:
-    0: Beach
-    1: Temple
-    2: Park
-
-tasks:
-  - id: preference_match
-    name: easy
-    description: Recommend a place matching user preferences
-    grader: reward
-
-  - id: budget_efficiency
-    name: medium
-    description: Plan a 1-day trip staying within budget
-    grader: reward
-
-  - id: itinerary_diversity
-    name: hard
-    description: Plan multi-day trip with diverse destinations
-    grader: reward
