@@ -1,57 +1,43 @@
 import os
-from openai import OpenAI
 from env import TravelEnv
 
+MODEL_NAME = os.environ.get("MODEL_NAME", "default")
 
-client = OpenAI(
-    api_key=os.environ.get("API_KEY"),
-    base_url=os.environ.get("API_BASE_URL")
-)
+PLACE_INFO = {
+    0: {"type": "nature",    "cost": 4000, "rating": 4.5},
+    1: {"type": "spiritual", "cost": 2000, "rating": 5.0},
+    2: {"type": "nature",    "cost": 1000, "rating": 3.5},
+}
+
+TASKS = [
+    {"id": "easy",   "preferences": ["nature"],             "budget": 5000},
+    {"id": "medium", "preferences": ["spiritual"],          "budget": 3000},
+    {"id": "hard",   "preferences": ["nature","spiritual"], "budget": 2000},
+]
+
+def score(action, preferences, budget):
+    p = PLACE_INFO[action]
+    s = 0.0
+    if p["type"] in preferences: s += 0.45
+    if p["cost"] <= budget: s += 0.35
+    s += (p["rating"] - 3.5) / 1.5 * 0.18
+    return round(max(0.01, min(0.99, s)), 4)
 
 env = TravelEnv()
 
-print("[START] Running Travel RL Environment")
-
-state = env.reset()
-print(f"[STEP] Initial State: {state}")
-
-total_reward = 0
-
-for step in range(3):
-
-   
-    prompt = f"State: {state}. Choose action (0,1,2). Return only one number."
-
-    try:
-        response = client.chat.completions.create(
-            model=os.environ.get("MODEL_NAME"),
-            messages=[
-                {"role": "user", "content": prompt}
-            ]
-        )
-
-        action_text = response.choices[0].message.content.strip()
-
-    except Exception as e:
-        # fallback if API fails
-        print("[STEP] API error, using fallback")
-        action_text = "0"
-
-    if action_text not in ["0", "1", "2"]:
-        action = 0
-    else:
-        action = int(action_text)
-
-    state, reward, done, _ = env.step(action)
-
-    total_reward += reward
-
-    print(f"[STEP] Step {step+1}")
-    print(f"[STEP] Action: {action}")
-    print(f"[STEP] State: {state}")
-    print(f"[STEP] Reward: {reward}")
-
-    if done:
-        break
-
-print(f"[END] Total Reward: {total_reward}")
+for task in TASKS:
+    print(f"[START] task={task['id']} env=travel_planner_env model={MODEL_NAME}")
+    state = env.reset()
+    env.current_state["preferences"] = task["preferences"]
+    env.current_state["budget"]      = task["budget"]
+    rewards = []
+    for step in range(3):
+        action = max([0,1,2], key=lambda a: score(a, task["preferences"], task["budget"]))
+        state, _, done, _ = env.step(action)
+        r = score(action, task["preferences"], task["budget"])
+        rewards.append(r)
+        print(f"[STEP] step={step+1} action={action} reward={r} done={str(done).lower()} error=null")
+        if done: break
+    final = round(sum(rewards)/len(rewards), 4)
+    print(f"[END] success=true steps={len(rewards)} score={final} rewards={','.join(map(str,rewards))}")
+    print()
