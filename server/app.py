@@ -1,3 +1,7 @@
+import sys
+import os
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 from flask import Flask, request, jsonify
 from env import TravelEnv
 
@@ -14,7 +18,7 @@ def step():
     state, reward, done, info = env.step(action)
     return jsonify({"observation": state, "reward": reward, "done": done, "info": info})
 
-@app.get("/state")
+@app.route("/state", methods=["GET"])
 def state():
     return jsonify({"state": env.state()})
 
