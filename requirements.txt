@@ -1,5 +1,6 @@
-openenv-core>=0.2.0
+flask
 fastapi
 uvicorn
 pydantic
 openai
+openenv-core>=0.2.0
