@@ -1,10 +1,15 @@
 spec_version: 1
-name: travel_planner_env
-type: environment
-runtime: docker
 app: server.app:app
-port: 7860
-
-description: >
-  A reinforcement learning environment for smart travel planning.
-  The agent recommends places based on budget and user preferences.
+tasks:
+  - id: easy_task
+    name: Easy Task
+    difficulty: easy
+    grader: server.graders:EasyGrader
+  - id: medium_task
+    name: Medium Task
+    difficulty: medium
+    grader: server.graders:MediumGrader
+  - id: hard_task
+    name: Hard Task
+    difficulty: hard
+    grader: server.graders:HardGrader
