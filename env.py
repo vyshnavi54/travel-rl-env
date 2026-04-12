@@ -90,4 +90,5 @@ class TravelEnv:
             "budget_efficiency":   grade_budget_efficiency(action, self.current_state),
             "itinerary_diversity": grade_itinerary_diversity(self.actions_history),
         }
-        return self.current_state, reward, self.done, {"scores": scores, "place": chosen["name"]}
+        normalized = round(max(0.01, min(0.99, (reward + 10) / 25)), 4)
+        return self.current_state, normalized, self.done, {}
